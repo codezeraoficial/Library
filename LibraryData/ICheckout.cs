@@ -9,7 +9,7 @@ namespace LibraryData
         void Add(Checkout newCheckout);
 
         void CheckOutItem(int assetId, int libraryCardId);
-        void CheckInItem(int assetId, int libraryCardId);
+        void CheckInItem(int assetId);
         void PlaceHold(int assetId, int libraryCardId);
         void MarkLost(int assetId);
         void MarkFound(int assetId);
@@ -19,6 +19,7 @@ namespace LibraryData
         string GetCurrentCheckoutPatron(int assetId);
         string GetCurrentHoldPatronName(int id);
         DateTime GetCurrentHoldPlaced(int id);
+        bool IsCheckedOut(int id);
 
         IEnumerable<Checkout> GetAll();
         IEnumerable<Hold> GetCurrentHolds(int id);

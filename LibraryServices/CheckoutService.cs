@@ -98,7 +98,7 @@ namespace LibraryServices
             UpdateAssetStatus(assetId, "Lost");
             _context.SaveChanges();
         }
-        public void CheckInItem(int assetId, int libraryCardId)
+        public void CheckInItem(int assetId)
         {
             var now = DateTime.Now;
 
@@ -118,6 +118,7 @@ namespace LibraryServices
             if (currentHolds.Any())
             {
                 CheckoutToEarliestHold(assetId, currentHolds);
+                return;
             }
 
             UpdateAssetStatus(assetId, "Available");
@@ -135,7 +136,7 @@ namespace LibraryServices
             _context.Remove(earliestHold);
             _context.SaveChanges();
 
-            CheckInItem(assetId, card.Id);
+            CheckInItem(assetId);
         }
         public void CheckOutItem(int assetId, int libraryCardId)
         {
@@ -174,12 +175,12 @@ namespace LibraryServices
 
             _context.SaveChanges();
 
-        }        
+        }
         private DateTime GetDefaultCheckoutTime(DateTime now)
         {
             return now.AddDays(30);
         }
-        private bool IsCheckedOut(int assetId)
+        public bool IsCheckedOut(int assetId)
         {
             return _context.Checkouts
                  .Where(co => co.LibraryAsset.Id == assetId)
@@ -190,6 +191,7 @@ namespace LibraryServices
             var now = DateTime.Now;
 
             var asset = _context.LibraryAssets
+                .Include(a => a.Status)
                 .FirstOrDefault(a => a.Id == assetId);
 
             var card = _context.LibraryCards
@@ -227,13 +229,13 @@ namespace LibraryServices
         }
         public DateTime GetCurrentHoldPlaced(int holdId)
         {
-             return _context.Holds
-            .Include(h => h.LibraryAsset)
-            .Include(h => h.LibraryCard)
-            .FirstOrDefault(h => h.Id == holdId)
-            .HoldPlaced;
+            return _context.Holds
+           .Include(h => h.LibraryAsset)
+           .Include(h => h.LibraryCard)
+           .FirstOrDefault(h => h.Id == holdId)
+           .HoldPlaced;
 
-       
+
         }
         public string GetCurrentCheckoutPatron(int assetId)
         {
@@ -260,5 +262,7 @@ namespace LibraryServices
                 .FirstOrDefault(co => co.LibraryAsset.Id == assetId);
 
         }
+
+
     }
 }

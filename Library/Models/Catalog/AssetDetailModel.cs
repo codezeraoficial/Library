@@ -12,7 +12,7 @@ namespace Library.Models.Catalog
         public string Type { get; set; }
         public int Year { get; set; }
         public string ISBN { get; set; }
-        public string DeweyCallNumber { get; set; }
+        public string Dewey { get; set; }
         public string Status { get; set; }
         public decimal Cost { get; set; }
         public string CurrentLocation { get; set; }
@@ -26,6 +26,6 @@ namespace Library.Models.Catalog
     public class AssetHoldModel
     {
         public string PatronName { get; set; }
-        public DateTime HoldPlace { get; set; }
+        public string HoldPlaced { get; set; }
     }
 }
